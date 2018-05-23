@@ -1,4 +1,6 @@
+extern crate bitreader;
 extern crate scan_dir;
+use bitreader::BitReader;
 use scan_dir::ScanDir;
 use std::fs::File;
 use std::io::prelude::*;
@@ -11,15 +13,11 @@ fn main() {
 
   println!("path: {}", path);
 
-  let mut data: Vec<u8> = vec![];
   ScanDir::files()
     .read(path, |files| {
       for (entry, name) in files {
         println!("read: {}", name);
-        for byte in read_binary_file(entry.path()) {
-          data.push(byte);
-        }
-        print_binary_data(&data);
+        print_binary_data(read_binary_file(entry.path()));
       }
     })
     .unwrap();
@@ -27,14 +25,17 @@ fn main() {
 
 fn read_binary_file(file: std::path::PathBuf) -> Vec<u8> {
   let mut data = vec![];
-  let mut file = File::open(file).expect("open file error");
-  file.read_to_end(&mut data).expect("read error");
+  let mut file = File::open(file).unwrap();
+  let len = file.read_to_end(&mut data).unwrap();
+  println!("read {} bytes", len);
   data
 }
 
-fn print_binary_data(data: &Vec<u8>) {
+fn print_binary_data(bytes: Vec<u8>) {
   print!("Bitfield:");
-  for bit in data[..85].iter() {
-    print!("{:?} ", bit);
+  let mut bitfield = BitReader::new(&bytes[..11]);
+  for _n in 0..84 {
+    print!("{}", bitfield.read_u8(1).unwrap());
   }
+  println!();
 }
