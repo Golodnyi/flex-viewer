@@ -4,5 +4,4 @@ version = "0.1.0"
 authors = ["Golodnyi <ochen@golodnyi.ru>"]
 
 [dependencies]
-scan_dir = "0.3.3"
 bitreader = "0.3.1"
