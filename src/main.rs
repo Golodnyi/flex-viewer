@@ -18,7 +18,7 @@ fn main() {
                 continue;
             }
         };
-        match flex::bitfield_parse(&data) {
+        match flex::parse(&data) {
             Err(e) => {
                 println!("Error: {}", e);
                 continue;
