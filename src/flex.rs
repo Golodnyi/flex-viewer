@@ -1,11 +1,11 @@
+extern crate serde;
+extern crate serde_json;
 extern crate bitreader;
 
 use std::io;
 use self::bitreader::BitReader;
 
-const SIGNED: u8 = 0;
-const UNSIGNED: u8 = 1;
-const FLOAT: u8 = 2;
+static FLEX_CONFIG: &'static str = include_str!("./../bitfield.json");
 
 struct Flex {
     size: u8,
@@ -14,38 +14,26 @@ struct Flex {
     value: usize,
 }
 
+#[derive(Serialize, Deserialize)]
+struct Config {
+    size: u8,
+    character: u8
+}
+
 struct BitfieldSize {
     bites: u8,
     bytes: u8,
 }
 
-fn get_sensors() -> Vec<Flex> {
+fn get_sensors() -> Result<Vec<Flex>, io::Error> {
     let mut sensors: Vec<Flex> = vec![];
+    let flex: Vec<Config> = serde_json::from_str(&FLEX_CONFIG)?;
 
-    let size: Vec<u8> = vec![
-        4, 2, 4, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 2, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
-        1, 4, 4, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 2, 1, 4, 2, 2, 2, 2, 2,
-        1, 1, 1, 2, 4, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
-    ];
-
-    let character: Vec<u8> = vec![
-        UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED,
-        SIGNED, SIGNED, SIGNED, FLOAT, UNSIGNED, FLOAT, FLOAT, UNSIGNED, UNSIGNED, UNSIGNED,
-        UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED,
-        UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED,
-        UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, SIGNED, SIGNED,
-        SIGNED, SIGNED, SIGNED, SIGNED, SIGNED, SIGNED, UNSIGNED, FLOAT, UNSIGNED, SIGNED, FLOAT,
-        UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED,
-        UNSIGNED, SIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED,
-        UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED, UNSIGNED,
-        UNSIGNED,
-    ];
-
-    for i in 0..85 {
-        sensors.push(Flex { size: size[i as usize], character: character[i as usize], enable: false, value: 0 });
+    for f in flex {
+        sensors.push(Flex { size: f.size, character: f.character, enable: false, value: 0 });
     }
 
-    sensors
+    Ok(sensors)
 }
 
 pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
@@ -54,7 +42,7 @@ pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
         return Err(err);
     }
 
-    let mut bitfield_size: BitfieldSize = BitfieldSize { bites: bytes[0], bytes: bytes[0] / 8 + 1 };
+    let bitfield_size: BitfieldSize = BitfieldSize { bites: bytes[0], bytes: bytes[0] / 8 + 1 };
 
     println!("Bitfield size: {} bits ({} bytes)", bitfield_size.bites, bitfield_size.bytes);
 
@@ -64,10 +52,10 @@ pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
     }
 
     let mut from: usize = (bitfield_size.bytes + 1) as usize;
-    let mut to: usize = from;
+    let mut to: usize;
 
     while bytes[from..].len() > 0 {
-        let mut sensors: Vec<Flex> = get_sensors();
+        let mut sensors: Vec<Flex> = get_sensors()?;
         let mut bitfield = BitReader::new(&bytes[1..=(bitfield_size.bytes as usize)]);
         for i in 0..bitfield_size.bites {
             sensors[i as usize].enable = match bitfield.read_u8(1).unwrap() {
@@ -86,7 +74,7 @@ pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
                 return Err(err);
             }
 
-            to = (from + sensor.size as usize);
+            to = from + sensor.size as usize;
             let field = &bytes[from..to];
 
             println!("read from: {}, to: {}, total: {}, value: {:?}",
