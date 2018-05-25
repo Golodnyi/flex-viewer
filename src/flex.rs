@@ -1,23 +1,31 @@
 extern crate serde;
 extern crate serde_json;
 extern crate bitreader;
+extern crate byteorder;
 
 use std::io;
 use self::bitreader::BitReader;
+use self::byteorder::{LittleEndian, ReadBytesExt};
 
 static FLEX_CONFIG: &'static str = include_str!("./../bitfield.json");
+
+const SIGNED: u8 = 0;
+const UNSIGNED: u8 = 1;
+const ONE: u8 = 1;
+const TWO: u8 = 2;
+const FOUR: u8 = 4;
 
 struct Flex {
     size: u8,
     character: u8,
     enable: bool,
-    value: usize,
+    value: f64
 }
 
 #[derive(Serialize, Deserialize)]
 struct Config {
     size: u8,
-    character: u8
+    character: u8,
 }
 
 struct BitfieldSize {
@@ -30,7 +38,7 @@ fn get_sensors() -> Result<Vec<Flex>, io::Error> {
     let flex: Vec<Config> = serde_json::from_str(&FLEX_CONFIG)?;
 
     for f in flex {
-        sensors.push(Flex { size: f.size, character: f.character, enable: false, value: 0 });
+        sensors.push(Flex { size: f.size, character: f.character, enable: false, value: 0 as f64 });
     }
 
     Ok(sensors)
@@ -64,7 +72,7 @@ pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
             }
         }
 
-        for sensor in sensors {
+        for mut sensor in sensors {
             if !sensor.enable {
                 continue;
             }
@@ -75,12 +83,41 @@ pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
             }
 
             to = from + sensor.size as usize;
-            let field = &bytes[from..to];
+            let mut field = &bytes[from..to];
 
-            println!("read from: {}, to: {}, total: {}, value: {:?}",
+            sensor.value = match sensor.size {
+                ONE => {
+                    if sensor.character == SIGNED {
+                        field.read_i8().unwrap() as f64
+                    } else {
+                        field.read_u8().unwrap() as f64
+                    }
+                },
+                TWO => {
+                    if sensor.character == SIGNED {
+                        field.read_i16::<LittleEndian>().unwrap() as f64
+                    } else {
+                        field.read_u16::<LittleEndian>().unwrap() as f64
+                    }
+                },
+                FOUR => {
+                    if sensor.character == SIGNED {
+                        field.read_i32::<LittleEndian>().unwrap() as f64
+                    } else if sensor.character == UNSIGNED {
+                        field.read_u32::<LittleEndian>().unwrap() as f64
+                    } else {
+                        field.read_f32::<LittleEndian>().unwrap() as f64
+                    }
+                },
+                _ => {
+                    0 as f64
+                }
+            };
+
+            println!("read from: {}, to: {}, total: {}, value: {}",
                      from, sensor.size as usize,
                      (bytes[from..].len() - sensor.size as usize),
-                     field);
+                     sensor.value);
 
             from += sensor.size as usize;
         }
