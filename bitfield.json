@@ -1,341 +1,426 @@
 [
   {
+    "name": "numPage",
     "size": 4,
     "character": 1
   },
   {
+    "name": "Code",
     "size": 2,
     "character": 1
   },
   {
+    "name": "Time",
     "size": 4,
     "character": 1
   },
   {
+    "name": "State",
     "size": 1,
     "character": 1
   },
   {
+    "name": "Module1",
     "size": 1,
     "character": 1
   },
   {
+    "name": "Module2",
     "size": 1,
     "character": 1
   },
   {
+    "name": "GSM",
     "size": 1,
     "character": 1
   },
   {
+    "name": "StateGauge",
     "size": 1,
     "character": 1
   },
   {
+    "name": "LastTime",
     "size": 4,
     "character": 1
   },
   {
+    "name": "Lat",
     "size": 4,
     "character": 0
   },
   {
+    "name": "Lon",
     "size": 4,
     "character": 0
   },
   {
+    "name": "Alt",
     "size": 4,
     "character": 0
   },
   {
+    "name": "Speed",
     "size": 4,
     "character": 2
   },
   {
+    "name": "Course",
     "size": 2,
     "character": 1
   },
   {
+    "name": "Mileage",
     "size": 4,
     "character": 2
   },
   {
+    "name": "Way",
     "size": 4,
     "character": 2
   },
   {
+    "name": "AllSeconds",
     "size": 2,
     "character": 1
   },
   {
+    "name": "SecondLast",
     "size": 2,
     "character": 1
   },
   {
+    "name": "Power",
     "size": 2,
     "character": 1
   },
   {
+    "name": "Reserv",
     "size": 2,
     "character": 1
   },
   {
+    "name": "StateU_Ain1",
     "size": 2,
     "character": 1
   },
   {
+    "name": "StateU_Ain2",
     "size": 2,
     "character": 1
   },
   {
+    "name": "StateU_Ain3",
     "size": 2,
     "character": 1
   },
   {
+    "name": "StateU_Ain4",
     "size": 2,
     "character": 1
   },
   {
+    "name": "StateU_Ain5",
     "size": 2,
     "character": 1
   },
   {
+    "name": "StateU_Ain6",
     "size": 2,
     "character": 1
   },
   {
+    "name": "StateU_Ain7",
     "size": 2,
     "character": 1
   },
   {
+    "name": "StateU_Ain8",
     "size": 2,
     "character": 1
   },
   {
+    "name": "StateIn1",
     "size": 1,
     "character": 1
   },
   {
+    "name": "StateIn2",
     "size": 1,
     "character": 1
   },
   {
+    "name": "StateOut1",
     "size": 1,
     "character": 1
   },
   {
+    "name": "StateOut2",
     "size": 1,
     "character": 1
   },
   {
+    "name": "StateInImp1",
     "size": 4,
     "character": 1
   },
   {
+    "name": "StateInImp2",
     "size": 4,
     "character": 1
   },
   {
+    "name": "Frequency1",
     "size": 2,
     "character": 1
   },
   {
+    "name": "Frequency2",
     "size": 2,
     "character": 1
   },
   {
+    "name": "Motochas",
     "size": 4,
     "character": 1
   },
   {
+    "name": "LevelRS485_1",
     "size": 2,
     "character": 1
   },
   {
+    "name": "LevelRS485_2",
     "size": 2,
     "character": 1
   },
   {
+    "name": "LevelRS485_3",
     "size": 2,
     "character": 1
   },
   {
+    "name": "LevelRS485_4",
     "size": 2,
     "character": 1
   },
   {
+    "name": "LevelRS485_5",
     "size": 2,
     "character": 1
   },
   {
+    "name": "LevelRS485_6",
     "size": 2,
     "character": 1
   },
   {
+    "name": "LevelRS232",
     "size": 2,
     "character": 1
   },
   {
+    "name": "Temp1",
     "size": 1,
     "character": 0
   },
   {
+    "name": "Temp2",
     "size": 1,
     "character": 0
   },
   {
+    "name": "Temp3",
     "size": 1,
     "character": 0
   },
   {
+    "name": "Temp4",
     "size": 1,
     "character": 0
   },
   {
+    "name": "Temp5",
     "size": 1,
     "character": 0
   },
   {
+    "name": "Temp6",
     "size": 1,
     "character": 0
   },
   {
+    "name": "Temp7",
     "size": 1,
     "character": 0
   },
   {
+    "name": "Temp8",
     "size": 1,
     "character": 0
   },
   {
+    "name": "CAN_FuelLevel",
     "size": 2,
     "character": 1
   },
   {
+    "name": "CAN_FuelConsumption",
     "size": 4,
     "character": 2
   },
   {
+    "name": "CAN_EngineTurns",
     "size": 2,
     "character": 1
   },
   {
+    "name": "CAN_Temp",
     "size": 1,
     "character": 0
   },
   {
+    "name": "CAN_FullRun",
     "size": 4,
     "character": 2
   },
   {
+    "name": "CAN_AxleLoad_1",
     "size": 2,
     "character": 1
   },
   {
+    "name": "CAN_AxleLoad_2",
     "size": 2,
     "character": 1
   },
   {
+    "name": "CAN_AxleLoad_3",
     "size": 2,
     "character": 1
   },
   {
+    "name": "CAN_AxleLoad_4",
     "size": 2,
     "character": 1
   },
   {
+    "name": "CAN_AxleLoad_5",
     "size": 2,
     "character": 1
   },
   {
+    "name": "CAN_PedalAccel",
     "size": 1,
     "character": 1
   },
   {
+    "name": "CAN_PedalStop",
     "size": 1,
     "character": 1
   },
   {
+    "name": "CAN_EngineLoad",
     "size": 1,
     "character": 1
   },
   {
+    "name": "CAN_LevelFiltr",
     "size": 2,
     "character": 1
   },
   {
+    "name": "CAN_EngineTime",
     "size": 4,
     "character": 1
   },
   {
+    "name": "CAN_TimeTO",
     "size": 2,
     "character": 0
   },
   {
+    "name": "CAN_Speed",
     "size": 1,
     "character": 1
   },
   {
+    "name": "ATemp1",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp2",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp3",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp4",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp5",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp6",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp7",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp8",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp9",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp10",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp11",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp12",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp13",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp14",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp15",
     "size": 2,
     "character": 1
   },
   {
+    "name": "ATemp16",
     "size": 2,
     "character": 1
   }

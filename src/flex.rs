@@ -16,14 +16,16 @@ const TWO: u8 = 2;
 const FOUR: u8 = 4;
 
 struct Flex {
+    name: String,
     size: u8,
     character: u8,
     enable: bool,
-    value: f64
+    value: f64,
 }
 
 #[derive(Serialize, Deserialize)]
 struct Config {
+    name: String,
     size: u8,
     character: u8,
 }
@@ -38,7 +40,7 @@ fn get_sensors() -> Result<Vec<Flex>, io::Error> {
     let flex: Vec<Config> = serde_json::from_str(&FLEX_CONFIG)?;
 
     for f in flex {
-        sensors.push(Flex { size: f.size, character: f.character, enable: false, value: 0 as f64 });
+        sensors.push(Flex { name: f.name, size: f.size, character: f.character, enable: false, value: 0 as f64 });
     }
 
     Ok(sensors)
@@ -92,14 +94,14 @@ pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
                     } else {
                         field.read_u8().unwrap() as f64
                     }
-                },
+                }
                 TWO => {
                     if sensor.character == SIGNED {
                         field.read_i16::<LittleEndian>().unwrap() as f64
                     } else {
                         field.read_u16::<LittleEndian>().unwrap() as f64
                     }
-                },
+                }
                 FOUR => {
                     if sensor.character == SIGNED {
                         field.read_i32::<LittleEndian>().unwrap() as f64
@@ -108,15 +110,16 @@ pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
                     } else {
                         field.read_f32::<LittleEndian>().unwrap() as f64
                     }
-                },
+                }
                 _ => {
                     0 as f64
                 }
             };
 
-            println!("read from: {}, to: {}, total: {}, value: {}",
+            println!("read from: {}, to: {}, total: {}, {}: {}",
                      from, sensor.size as usize,
                      (bytes[from..].len() - sensor.size as usize),
+                     sensor.name,
                      sensor.value);
 
             from += sensor.size as usize;
