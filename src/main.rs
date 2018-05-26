@@ -3,7 +3,7 @@ extern crate serde_derive;
 mod reader;
 mod flex;
 use std::path::PathBuf;
-use std::env::current_exe;
+use std::env::current_dir;
 fn main() {
     let mut path = PathBuf::new();
     match std::env::args().skip(1).next() {
@@ -11,8 +11,8 @@ fn main() {
             path.push(p);
         }
         None => {
-            let current_exe = current_exe().unwrap();
-            path.push(current_exe.join("logs"));
+            let current_dir = current_dir().unwrap();
+            path.push(current_dir.join("logs"));
         }
     }
 
