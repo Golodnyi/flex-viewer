@@ -4,12 +4,12 @@ extern crate serde;
 extern crate byteorder;
 
 mod bitfield;
-mod config;
+mod flex;
 
 use std::io;
 use self::byteorder::{LittleEndian, ReadBytesExt};
 use bitfield::Bitfield;
-use config::Flex;
+use flex::Flex;
 
 const SIGNED: u8 = 0;
 const UNSIGNED: u8 = 1;
@@ -24,7 +24,7 @@ pub fn parse(data: Vec<u8>) -> Result<(), io::Error> {
     }
 
     let bitfield: Bitfield = bitfield::get(&data)?;
-    let mut sensors: Vec<Flex> = config::get(&bitfield)?;
+    let mut sensors: Vec<Flex> = flex::get(&bitfield)?;
 
     let mut from: usize = (bitfield.size.bytes + 1) as usize;
     let mut to: usize;

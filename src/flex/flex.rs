@@ -23,21 +23,21 @@ pub struct Flex {
 }
 
 pub fn get(bitfield: &Bitfield) -> Result<Vec<Flex>, io::Error> {
-    let mut config: Vec<Flex> = vec![];
-    let flex: Vec<Config> = serde_json::from_str(&FLEX_CONFIG)?;
+    let mut flex: Vec<Flex> = vec![];
+    let config: Vec<Config> = serde_json::from_str(&FLEX_CONFIG)?;
 
-    for f in flex {
-        config.push(Flex { name: f.name, size: f.size, character: f.character, enable: false, value: 0 as f64 });
+    for conf in config {
+        flex.push(Flex { name: conf.name, size: conf.size, character: conf.character, enable: false, value: 0 as f64 });
     }
-    load_sensors(&mut config, &bitfield);
+    load_sensors(&mut flex, &bitfield);
 
-    Ok(config)
+    Ok(flex)
 }
 
-fn load_sensors(config: &mut Vec<Flex>, bitfield: &Bitfield) {
+fn load_sensors(flex: &mut Vec<Flex>, bitfield: &Bitfield) {
     let mut bit_reader = BitReader::new(&bitfield.data);
     for i in 0..bitfield.size.bits {
-        config[i as usize].enable = match bit_reader.read_u8(1).unwrap() {
+        flex[i as usize].enable = match bit_reader.read_u8(1).unwrap() {
             1 => true,
             _ => false
         }
