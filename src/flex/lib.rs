@@ -30,7 +30,7 @@ pub fn parse(data: Vec<u8>) -> Result<(), io::Error> {
     let mut to: usize;
 
     while data[from..].len() > 0 {
-        for sensor in &mut sensors {
+        for sensor in sensors.iter_mut() {
             if !sensor.enable {
                 continue;
             }
