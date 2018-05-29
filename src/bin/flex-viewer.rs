@@ -24,7 +24,7 @@ fn main() {
                 continue;
             }
         };
-        match flex::parse(&data) {
+        match flex::parse(data) {
             Err(e) => {
                 println!("Error: {}", e);
                 continue;
