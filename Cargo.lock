@@ -14,14 +14,22 @@ version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "flex-viewer"
+name = "flex"
 version = "0.1.0"
 dependencies = [
  "bitreader 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "byteorder 1.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde 1.0.59 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_derive 1.0.59 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_json 1.0.17 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.62 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_derive 1.0.62 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "flex-viewer"
+version = "0.1.0"
+dependencies = [
+ "flex 0.1.0",
+ "reader 0.1.0",
 ]
 
 [[package]]
@@ -46,13 +54,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "reader"
+version = "0.1.0"
+
+[[package]]
 name = "serde"
-version = "1.0.59"
+version = "1.0.62"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "serde_derive"
-version = "1.0.59"
+version = "1.0.62"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -62,12 +74,12 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.17"
+version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "dtoa 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "itoa 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde 1.0.59 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.62 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -92,8 +104,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum itoa 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "c069bbec61e1ca5a596166e55dfe4773ff745c3d16b700013bcaff9a6df2c682"
 "checksum proc-macro2 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)" = "a45f2f0ae0b5757f6fe9e68745ba25f5246aea3598984ed81d013865873c1f84"
 "checksum quote 0.6.2 (registry+https://github.com/rust-lang/crates.io-index)" = "9e53eeda07ddbd8b057dde66d9beded11d0dfda13f0db0769e6b71d6bcf2074e"
-"checksum serde 1.0.59 (registry+https://github.com/rust-lang/crates.io-index)" = "2a4d976362a13caad61c38cf841401d2d4d480496a9391c3842c288b01f9de95"
-"checksum serde_derive 1.0.59 (registry+https://github.com/rust-lang/crates.io-index)" = "94bb618afe46430c6b089e9b111dc5b2fcd3e26a268da0993f6d16bea51c6021"
-"checksum serde_json 1.0.17 (registry+https://github.com/rust-lang/crates.io-index)" = "f3ad6d546e765177cf3dded3c2e424a8040f870083a0e64064746b958ece9cb1"
+"checksum serde 1.0.62 (registry+https://github.com/rust-lang/crates.io-index)" = "44d9552562673a8ea8757f5b77ccd794b54dd6841d2def71e9936f293ee81c72"
+"checksum serde_derive 1.0.62 (registry+https://github.com/rust-lang/crates.io-index)" = "9503e0851dc4398d7f7ee1da227f9c9b9cf82718eb239ab10847b1de6e2a5777"
+"checksum serde_json 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)" = "ee382a792fabc5d720630aeafe1a4c69abe3d32aaaa5dbba6762fd8246d1bbe3"
 "checksum syn 0.14.0 (registry+https://github.com/rust-lang/crates.io-index)" = "99d991a9e7c33123925e511baab68f7ec25c3795962fe326a2395e5a42a614f0"
 "checksum unicode-xid 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"

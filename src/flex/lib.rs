@@ -1,3 +1,5 @@
+#[macro_use]
+extern crate serde_derive;
 extern crate serde;
 extern crate serde_json;
 extern crate bitreader;
@@ -7,7 +9,7 @@ use std::io;
 use self::bitreader::BitReader;
 use self::byteorder::{LittleEndian, ReadBytesExt};
 
-static FLEX_CONFIG: &'static str = include_str!("./../bitfield.json");
+static FLEX_CONFIG: &'static str = include_str!("./../../bitfield.json");
 
 const SIGNED: u8 = 0;
 const UNSIGNED: u8 = 1;

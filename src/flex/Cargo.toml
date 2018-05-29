@@ -1,0 +1,13 @@
+[package]
+name = "flex"
+version = "0.1.0"
+authors = ["Golodnyi <ochen@golodnyi.ru>"]
+[lib]
+name = "flex"
+path = "lib.rs"
+[dependencies]
+serde = "1.0.59"
+serde_json = "1.0"
+serde_derive = "1.0.59"
+bitreader = "0.3.1"
+byteorder = "1.2.3"

@@ -1,7 +1,5 @@
-#[macro_use]
-extern crate serde_derive;
-mod reader;
-mod flex;
+extern crate reader;
+extern crate flex;
 use std::path::PathBuf;
 use std::env::current_dir;
 fn main() {
@@ -35,10 +33,3 @@ fn main() {
         };
     }
 }
-
-
-
-
-
-
-
