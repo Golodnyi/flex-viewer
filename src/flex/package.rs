@@ -11,7 +11,8 @@ const ONE: u8 = 1;
 const TWO: u8 = 2;
 const FOUR: u8 = 4;
 
-pub fn parse(data: Vec<u8>, bitfield: Bitfield, flex: &mut Vec<Flex>) -> Result<(), io::Error> {
+pub fn parse(data: Vec<u8>, bitfield: Bitfield, flex: Vec<Flex>) -> Result<(), io::Error> {
+    let mut flex:Vec<Flex> = Vec::from(flex);
     let mut from: usize = (bitfield.size.bytes + 1) as usize;
     let mut to: usize;
 

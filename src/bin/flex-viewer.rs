@@ -4,10 +4,8 @@ extern crate html;
 
 use std::path::PathBuf;
 use std::env::current_dir;
-use flex::Flex;
 
 fn main() {
-    let mut flex_data: Vec<Flex> = vec![];
     let mut path = PathBuf::new();
 
     match std::env::args().skip(1).next() {
@@ -36,16 +34,7 @@ fn main() {
                 println!("Error: {}", e);
                 continue;
             },
-            Ok(flex) => {
-                flex_data = flex;
-            }
+            _ => {}
         };
-    }
-
-    match html::report(&mut flex_data) {
-        Err(e) => {
-            println!("Error: {}", e);
-        },
-        Ok(_) => {}
     }
 }
