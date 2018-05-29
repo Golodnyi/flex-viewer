@@ -11,12 +11,12 @@ const ONE: u8 = 1;
 const TWO: u8 = 2;
 const FOUR: u8 = 4;
 
-pub fn parse(data: &Vec<u8>, bitfield: &Bitfield, sensors: &mut Vec<Flex>) -> Result<(), io::Error> {
+pub fn parse(data: Vec<u8>, bitfield: Bitfield, flex: &mut Vec<Flex>) -> Result<(), io::Error> {
     let mut from: usize = (bitfield.size.bytes + 1) as usize;
     let mut to: usize;
 
     while data[from..].len() > 0 {
-        for sensor in sensors.iter_mut() {
+        for sensor in flex.iter_mut() {
             if !sensor.enable {
                 continue;
             }

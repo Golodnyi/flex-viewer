@@ -6,3 +6,4 @@ authors = ["Golodnyi <ochen@golodnyi.ru>"]
 [dependencies]
 flex = { path = "src/flex", version = "*" }
 reader = { path = "src/reader", version = "*" }
+html = { path = "src/html", version = "*" }

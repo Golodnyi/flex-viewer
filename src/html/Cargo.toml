@@ -1,0 +1,10 @@
+[package]
+name = "html"
+version = "0.1.0"
+authors = ["Golodnyi <ochen@golodnyi.ru>"]
+[lib]
+name = "html"
+path = "lib.rs"
+[dependencies]
+horrorshow = "0.6.3"
+flex = { path = "../flex", version = "*" }
