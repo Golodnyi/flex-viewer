@@ -18,7 +18,34 @@ pub fn parse(data: Vec<u8>) -> Result<(), io::Error> {
 
     let bitfield: Bitfield = bitfield::get(&data)?;
     let flex: Vec<Flex> = flex::get(&bitfield)?;
-    package::parse(data, bitfield, flex)?;
+
+    let mut flex:Vec<Flex> = Vec::from(flex);
+    let mut from: usize = (bitfield.size.bytes + 1) as usize;
+    let mut to: usize;
+
+    while data[from..].len() > 0 {
+        for sensor in flex.iter_mut() {
+            if !sensor.enable {
+                continue;
+            }
+
+            if data[from..].len() < sensor.size as usize {
+                let err = io::Error::new(io::ErrorKind::Other, "Ended data");
+                return Err(err);
+            }
+
+            to = from + sensor.size as usize;
+            package::parse(sensor, &data[from..to])?;
+            
+            println!("read from: {}, to: {}, total: {}, {}: {}",
+                     from, sensor.size as usize,
+                     (data[from..].len() - sensor.size as usize),
+                     sensor.name,
+                     sensor.value);
+
+            from += sensor.size as usize;
+        }
+    }
 
     Ok(())
 }
