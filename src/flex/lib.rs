@@ -1,7 +1,6 @@
 #[macro_use]
 extern crate serde_derive;
 extern crate serde;
-extern crate serde_json;
 extern crate bitreader;
 extern crate byteorder;
 
@@ -9,15 +8,14 @@ use std::io;
 use self::bitreader::BitReader;
 use self::byteorder::{LittleEndian, ReadBytesExt};
 
-static FLEX_CONFIG: &'static str = include_str!("./../../bitfield.json");
-
 const SIGNED: u8 = 0;
 const UNSIGNED: u8 = 1;
 const ONE: u8 = 1;
 const TWO: u8 = 2;
 const FOUR: u8 = 4;
+mod config;
 
-struct Flex {
+pub struct Flex {
     name: String,
     size: u8,
     character: u8,
@@ -25,27 +23,9 @@ struct Flex {
     value: f64,
 }
 
-#[derive(Serialize, Deserialize)]
-struct Config {
-    name: String,
-    size: u8,
-    character: u8,
-}
-
 struct BitfieldSize {
     bites: u8,
     bytes: u8,
-}
-
-fn get_sensors() -> Result<Vec<Flex>, io::Error> {
-    let mut sensors: Vec<Flex> = vec![];
-    let flex: Vec<Config> = serde_json::from_str(&FLEX_CONFIG)?;
-
-    for f in flex {
-        sensors.push(Flex { name: f.name, size: f.size, character: f.character, enable: false, value: 0 as f64 });
-    }
-
-    Ok(sensors)
 }
 
 pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
@@ -67,7 +47,7 @@ pub fn parse(bytes: &Vec<u8>) -> Result<(), io::Error> {
     let mut to: usize;
 
     while bytes[from..].len() > 0 {
-        let mut sensors: Vec<Flex> = get_sensors()?;
+        let mut sensors: Vec<Flex> = config::get()?;
         let mut bitfield = BitReader::new(&bytes[1..=(bitfield_size.bytes as usize)]);
         for i in 0..bitfield_size.bites {
             sensors[i as usize].enable = match bitfield.read_u8(1).unwrap() {
