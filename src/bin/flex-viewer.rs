@@ -5,6 +5,7 @@ extern crate html;
 use std::path::PathBuf;
 use std::env::current_dir;
 use flex::Flex;
+use std::fs;
 
 fn main() {
     let mut path = PathBuf::new();
@@ -19,6 +20,12 @@ fn main() {
         }
     }
 
+    match fs::remove_file("report.html") {
+        Err(e) => {
+            println!("Error: {}", e);
+        },
+        _ => {}
+    }
     println!("path: {:?}", path);
     let files = reader::read_dir(path).expect("Cannot read dir");
 
