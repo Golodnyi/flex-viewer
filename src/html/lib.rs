@@ -2,11 +2,11 @@
 extern crate horrorshow;
 extern crate flex;
 
-use horrorshow::helper::doctype;
-use std::fs::File;
 use std::io::prelude::*;
 use std::io;
 use flex::Flex;
+use std::fs::OpenOptions;
+use std::io::BufWriter;
 
 struct Table {
     header: Vec<String>,
@@ -35,28 +35,20 @@ fn parse_table(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
 pub fn report(flex: &mut Vec<Flex>) -> Result<(), io::Error> {
     let data_table: Table = parse_table(flex)?;
 
-    let html = format!("{}", html! {: doctype::HTML;
-    html {
-        head {
-            title: "Report";
-            style: "table, th, td { border: 1px solid black; }"
-        }
-        body {
-            h1: "Report";
-            table {
-                thead {
-                    tr {
-                        @ for key in &data_table.header {
-                            th: key
-                        }
+    let html = format!("{}", html! {
+        table {
+            thead {
+                tr {
+                    @ for key in &data_table.header {
+                        th: key
                     }
                 }
             }
         }
-    }});
+    });
 
-    let mut report = File::create("report.html").expect("Error create file");
-    report.write_all(html.as_bytes()).expect("Error write report");
-
+    let file = OpenOptions::new().write(true).create(true).append(true).open("report.html")?;
+    let mut buf = BufWriter::new(file);
+    buf.write(&html.as_bytes()).unwrap();
     Ok(())
 }
