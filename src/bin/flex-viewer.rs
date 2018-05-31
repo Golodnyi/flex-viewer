@@ -6,9 +6,11 @@ use std::path::PathBuf;
 use std::env::current_dir;
 use flex::Flex;
 use std::fs;
+use html::Table;
 
 fn main() {
     let mut path = PathBuf::new();
+    let mut tables: Vec<Table> = vec![];
 
     match std::env::args().skip(1).next() {
         Some(p) => {
@@ -44,14 +46,18 @@ fn main() {
             },
             Ok(flex) => {
                 let mut flex: Vec<Flex> = Vec::from(flex);
-                match html::report(&mut flex) {
+                match html::append(&mut flex) {
                     Err(e) => {
                         println!("Error: {}", e);
                         continue;
                     },
-                    _ => {}
+                    Ok(table) => {
+                        tables.push(table);
+                    }
                 }
             }
         };
     }
+
+    html::generate(&tables).expect("Error: generate report");
 }

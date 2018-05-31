@@ -8,8 +8,29 @@ use flex::Flex;
 use std::fs::OpenOptions;
 use std::io::BufWriter;
 
-struct Table {
-    header: Vec<String>,
+pub struct Table {
+    pub header: Vec<String>,
+    pub body: String,
+}
+
+fn template() -> String {
+    let template: String = format!("{}", html! {
+        html {
+            head {
+                title: "Report";
+                style: "table, th, td { border: 1px solid black; }";
+            }
+            body {
+                h1 {
+                    : "Report";
+                }
+
+                table { }
+            }
+        }
+    });
+
+    template
 }
 
 fn parse_table(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
@@ -27,20 +48,20 @@ fn parse_table(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
         header.push(sensor.name.clone());
     }
 
-    let table = Table { header: header };
+    let table = Table { header: header, body: "".to_owned() };
 
     Ok(table)
 }
 
-pub fn report(flex: &mut Vec<Flex>) -> Result<(), io::Error> {
-    let data_table: Table = parse_table(flex)?;
+pub fn append(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
+    let mut table: Table = parse_table(flex)?;
 
-    let html = format!("{}", html! {
-        table(style="border: 1px solid black;") {
+    table.body = format!("{}", html! {
+        table {
             thead {
                 tr {
-                    @ for key in &data_table.header {
-                        th(style="border: 1px solid black;"): key
+                    @ for key in &table.header {
+                        th: key
                     }
                 }
             }
@@ -49,7 +70,7 @@ pub fn report(flex: &mut Vec<Flex>) -> Result<(), io::Error> {
                     tr {
                         @ for j in i*85..(i+1)*85 {
                             @ if flex[j].enable {
-                                td(style="border: 1px solid black;"): &flex[j].value
+                                td: &flex[j].value
                             }
                         }
                     }
@@ -58,8 +79,20 @@ pub fn report(flex: &mut Vec<Flex>) -> Result<(), io::Error> {
         }
     });
 
+    Ok(table)
+}
+
+pub fn generate(tables: &Vec<Table>) -> Result<(), io::Error> {
+    let template: String = template();
+    let mut body: String = "".to_owned();
     let file = OpenOptions::new().write(true).create(true).append(true).open("report.html")?;
     let mut buf = BufWriter::new(file);
-    buf.write(&html.as_bytes()).unwrap();
+    for table in tables {
+        body.push_str(&table.body);
+    }
+
+    let template: String = template.replace("<table></table>", &body);
+    buf.write(template.as_bytes()).unwrap();
+
     Ok(())
 }
