@@ -4,6 +4,6 @@ version = "0.1.0"
 authors = ["Golodnyi <ochen@golodnyi.ru>"]
 
 [dependencies]
-flex = { path = "src/flex", version = "*" }
-reader = { path = "src/reader", version = "*" }
-html = { path = "src/html", version = "*" }
+flex = { path = "src/flex/src", version = "*" }
+reader = { path = "src/reader/src", version = "*" }
+html = { path = "src/html/src", version = "*" }

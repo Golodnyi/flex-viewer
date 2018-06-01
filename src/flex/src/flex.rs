@@ -5,7 +5,7 @@ use std::io;
 use self::bitreader::BitReader;
 use bitfield::Bitfield;
 
-static FLEX_CONFIG: &'static str = include_str!("./../../bitfield.json");
+static FLEX_CONFIG: &'static str = include_str!("../../../bitfield.json");
 
 #[derive(Serialize, Deserialize)]
 struct Config {
