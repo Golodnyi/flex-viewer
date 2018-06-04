@@ -102,7 +102,7 @@ pub fn append(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
                         tr {
                             @ for j in i*85..(i+1)*85 {
                                 @ if flex[j].enable && is_allowed_sensor(&flex[j].name).unwrap() {
-                                    td: &flex[j].value
+                                    td(value=&flex[j].value)
                                 }
                             }
                         }
