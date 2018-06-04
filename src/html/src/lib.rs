@@ -13,6 +13,7 @@ use std::usize;
 
 static JS_CODE: &'static str = include_str!("../../../template.js");
 static ALLOWED_SENSORS: &'static str = include_str!("../../../allowedSensors.json");
+static STYLES: &'static str = include_str!("../../../styles.css");
 
 pub struct Table {
     pub header: Vec<String>,
@@ -27,13 +28,9 @@ fn template() -> String {
                 head {
                     meta(charset="UTF-8");
                     title: "Report";
-                    style: "table, th, td { border: 1px solid black; }";
+                    style: Raw(&STYLES);
                 }
                 body {
-                    h1 {
-                        : "Report";
-                    }
-
                     table { }
                     script: Raw(&JS_CODE)
                 }
@@ -89,7 +86,7 @@ pub fn append(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
     table.body = format!(
         "{}",
         html! {
-            table(id="table") {
+            table(id="table", class="table") {
                 thead {
                     tr {
                         @ for key in &table.header {

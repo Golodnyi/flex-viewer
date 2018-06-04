@@ -49,17 +49,26 @@ function onClickSelect(index) {
 
 function renderSelects() {
     Array.from(document.getElementById("table").rows[0].cells).forEach(function (element, index) {
-        element.innerHTML = `<select class="select_` + index + `" onchange="onClickSelect(` + index + `)">
+        element.innerHTML = element.innerHTML + `<hr/><select style="width: 44px;" class="select_` + index + `" onchange="onClickSelect(` + index + `)">
                                     <option value="0">Микровольты</option>
                                     <option value="1">Время</option>
                                     <option value="2">Давление воздуха</option>
                                     <option value="3">Вакуум</option>
                                     <option value="4">Давление масла (грибок)</option>
                                     <option value="5">Давление масла (китайский)</option>
-                                </select>` + element.innerHTML;
+                                </select>`;
     });
 }
 renderSelects();
 Array.from(document.getElementById("table").rows[0].cells).forEach(function (element, index) {
+    if (element.innerHTML.substr(0, 4) == "Time") {
+        document.getElementsByClassName("select_" + index)[0].value = 1;
+    } else if (element.innerHTML.substr(0, 11) == "StateU_Ain1" || element.innerHTML.substr(0, 11) == "StateU_Ain2") {
+        document.getElementsByClassName("select_" + index)[0].value = 2;
+    } else if (element.innerHTML.substr(0, 11) == "StateU_Ain3" || element.innerHTML.substr(0, 11) == "StateU_Ain4") {
+         document.getElementsByClassName("select_" + index)[0].value = 3;
+    } else if (element.innerHTML.substr(0, 11) == "StateU_Ain5") {
+        document.getElementsByClassName("select_" + index)[0].value = 4;
+    }
     onClickSelect(index);
 });
