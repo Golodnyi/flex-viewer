@@ -37,12 +37,6 @@ pub fn parse(data: Vec<u8>) -> Result<(Vec<Flex>), io::Error> {
             to = from + sensor.size as usize;
             package::parse(sensor, &data[from..to])?;
 
-            println!("read from: {}, to: {}, total: {}, {}: {}",
-                     from, sensor.size as usize,
-                     (data[from..].len() - sensor.size as usize),
-                     sensor.name,
-                     sensor.value);
-
             from += sensor.size as usize;
         }
 

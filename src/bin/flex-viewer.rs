@@ -28,7 +28,7 @@ fn main() {
         },
         _ => {}
     }
-    println!("path: {:?}", path);
+
     let files = reader::read_dir(path).expect("Cannot read dir");
 
     for file in files.iter() {

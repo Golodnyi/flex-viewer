@@ -22,10 +22,8 @@ pub fn read_dir(dir: PathBuf) -> Result<Vec<PathBuf>, io::Error> {
 }
 
 pub fn read_binary_file(file: &PathBuf) -> Result<Vec<u8>, io::Error> {
-    println!("read {:?} file", file);
     let mut data: Vec<u8> = vec![];
     let mut file = File::open(file)?;
-    let len = file.read_to_end(&mut data)?;
-    println!("read {} bytes", len);
+    file.read_to_end(&mut data)?;
     Ok(data)
 }

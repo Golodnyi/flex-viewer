@@ -23,8 +23,6 @@ pub fn get(data: &Vec<u8>) -> Result<Bitfield, io::Error> {
         data: vec![]
     };
 
-    println!("Bitfield size: {} bits ({} bytes)", bitfield.size.bits, bitfield.size.bytes);
-
     if data[1..].len() < bitfield.size.bytes as usize {
         let err = io::Error::new(io::ErrorKind::Other, "Not found bitfield");
         return Err(err);
