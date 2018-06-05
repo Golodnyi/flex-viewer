@@ -2,11 +2,13 @@
 extern crate horrorshow;
 extern crate flex;
 extern crate serde_json;
+extern crate chrono;
 
 use flex::Flex;
 use horrorshow::prelude::*;
 use std::io;
 use std::usize;
+use chrono::prelude::*;
 
 static JS_CODE: &'static str = include_str!("../../../template.js");
 static ALLOWED_SENSORS: &'static str = include_str!("../../../allowedSensors.json");
@@ -15,6 +17,7 @@ static STYLES: &'static str = include_str!("../../../styles.css");
 pub struct Table {
     pub header: Vec<String>,
     pub body: String,
+    pub date: String
 }
 
 fn template() -> String {
@@ -72,6 +75,7 @@ fn parse_table(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
     let table = Table {
         header: header,
         body: "".to_owned(),
+        date: "".to_owned()
     };
 
     Ok(table)
@@ -79,6 +83,11 @@ fn parse_table(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
 
 pub fn append(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
     let mut table: Table = parse_table(flex)?;
+    if flex[2].name == "Time" {
+        table.date = NaiveDateTime::from_timestamp(flex[2].value as i64, 0).format("%Y-%m-%d").to_string();
+    } else {
+        table.date = "UnknownDate".to_owned();
+    }
 
     table.body = format!(
         "{}",
@@ -109,15 +118,9 @@ pub fn append(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
     Ok(table)
 }
 
-pub fn generate(tables: &Vec<Table>) -> Result<String, io::Error> {
+pub fn generate(table: &Table) -> Result<String, io::Error> {
     let template: String = template();
-    let mut body: String = "".to_owned();
-
-    for table in tables {
-        body.push_str(&table.body);
-    }
-
-    let template: String = template.replace("<table></table>", &body);
+    let template: String = template.replace("<table></table>", &table.body);
 
     Ok(template)
 }

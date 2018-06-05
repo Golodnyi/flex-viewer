@@ -9,3 +9,4 @@ path = "lib.rs"
 horrorshow = "0.6.3"
 flex = { path = "../../flex/src", version = "*" }
 serde_json = "1.0"
+chrono = "0.4"

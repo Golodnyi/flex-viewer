@@ -30,13 +30,28 @@ pub fn read_binary_file(file: &PathBuf) -> Result<Vec<u8>, io::Error> {
     Ok(data)
 }
 
-pub fn write_report_file(path: &str, data: String) -> Result<(), io::Error> {
-    let path = PathBuf::from(path);
+pub fn remove_reports(dir: PathBuf) -> Result<(), io::Error> {
+    let files = read_dir(dir)?;
 
-    match fs::remove_file(&path) {
-        Err(_e) => {},
-        _ => {}
-    };
+    for file in &files {
+        let extension = match file.extension() {
+            Some(ext) => ext,
+            None => {
+                continue;
+            }
+        };
+
+        if extension == "html" {
+            fs::remove_file(file)?;
+        }
+    }
+
+    Ok(())
+}
+
+pub fn write_report_file(path: &String, data: String) -> Result<(), io::Error> {
+    let mut path = PathBuf::from(path);
+    path.set_extension("html");
 
     let file = OpenOptions::new()
         .write(true)

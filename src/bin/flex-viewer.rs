@@ -5,11 +5,11 @@ extern crate html;
 use std::path::PathBuf;
 use std::env::current_dir;
 use flex::Flex;
-use html::Table;
 
 fn main() {
     let mut path = PathBuf::new();
-    let mut tables: Vec<Table> = vec![];
+    let dir = current_dir().unwrap();
+    reader::remove_reports(dir).expect("Error: remove reports");
 
     match std::env::args().skip(1).next() {
         Some(p) => {
@@ -43,7 +43,8 @@ fn main() {
                         continue;
                     }
                     Ok(table) => {
-                        tables.push(table);
+                        let report: String = html::generate(&table).expect("Error: generate report");
+                        reader::write_report_file(&table.date, report).expect("Error: save report");
                     }
                 }
             }
@@ -61,7 +62,4 @@ fn main() {
         }
         println!("{}% [{}]", progress, symbols);
     }
-
-    let report: String = html::generate(&tables).expect("Error: generate report");
-    reader::write_report_file("report.html", report).expect("Error: save report");
 }
