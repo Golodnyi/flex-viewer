@@ -5,6 +5,7 @@ extern crate html;
 use std::path::PathBuf;
 use std::env::current_dir;
 use flex::Flex;
+use std::process;
 
 fn main() {
     let mut path = PathBuf::new();
@@ -23,7 +24,12 @@ fn main() {
 
     let files = reader::read_dir(path).expect("Cannot read dir");
 
-    println!("0%");
+    if files.len() == 0 {
+        println!("Empty log files");
+        process::exit(0);
+    }
+
+    progress_bar(0);
 
     for (i, file) in files.iter().enumerate() {
         let data = match reader::read_log_file(file) {
@@ -49,16 +55,20 @@ fn main() {
             }
         };
         let progress: usize = ((i as f32 + 1.0) / files.len() as f32 * 100.0) as usize;
-        println!("{}[2J", 27 as char);
-        let mut symbols: String = "".to_string();
-
-        for p in 0..100 {
-            if p <= progress {
-                symbols.push_str("+");
-            } else {
-                symbols.push_str(" ");
-            }
-        }
-        println!("{}% [{}]", progress, symbols);
+        progress_bar(progress);
     }
+}
+
+fn progress_bar(progress: usize) {
+    println!("{}[2J", 27 as char);
+    let mut symbols: String = "".to_string();
+
+    for p in 0..100 {
+        if p <= progress {
+            symbols.push_str("+");
+        } else {
+            symbols.push_str(" ");
+        }
+    }
+    println!("{}% [{}]", progress, symbols);
 }

@@ -25,7 +25,7 @@ pub fn read_dir(dir: PathBuf) -> Result<Vec<PathBuf>, io::Error> {
 }
 
 pub fn read_log_file(file: &PathBuf) -> Result<Vec<u8>, io::Error> {
-    if check_extension(file, "log") {
+    if !check_extension(file, "log") {
         let err = io::Error::new(io::ErrorKind::Other, "Is not log file");
         return Err(err);
     }
@@ -75,6 +75,5 @@ fn check_extension(file: &PathBuf, ext: &str) -> bool {
             OsStr::new("None")
         }
     };
-
     extension == ext
 }
