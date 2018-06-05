@@ -26,7 +26,7 @@ fn main() {
     println!("0%");
 
     for (i, file) in files.iter().enumerate() {
-        let data = match reader::read_binary_file(file) {
+        let data = match reader::read_log_file(file) {
             Ok(data) => data,
             Err(_e) => {
                 continue;

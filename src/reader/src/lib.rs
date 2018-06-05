@@ -5,6 +5,7 @@ use std::fs;
 use std::fs::File;
 use std::io::BufWriter;
 use std::fs::OpenOptions;
+use std::ffi::OsStr;
 
 pub fn read_dir(dir: PathBuf) -> Result<Vec<PathBuf>, io::Error> {
     let mut files: Vec<PathBuf> = vec![];
@@ -23,7 +24,12 @@ pub fn read_dir(dir: PathBuf) -> Result<Vec<PathBuf>, io::Error> {
     Ok(files)
 }
 
-pub fn read_binary_file(file: &PathBuf) -> Result<Vec<u8>, io::Error> {
+pub fn read_log_file(file: &PathBuf) -> Result<Vec<u8>, io::Error> {
+    if check_extension(file, "log") {
+        let err = io::Error::new(io::ErrorKind::Other, "Is not log file");
+        return Err(err);
+    }
+
     let mut data: Vec<u8> = vec![];
     let mut file = File::open(file)?;
     file.read_to_end(&mut data)?;
@@ -34,14 +40,7 @@ pub fn remove_reports(dir: PathBuf) -> Result<(), io::Error> {
     let files = read_dir(dir)?;
 
     for file in &files {
-        let extension = match file.extension() {
-            Some(ext) => ext,
-            None => {
-                continue;
-            }
-        };
-
-        if extension == "html" {
+        if check_extension(file, "html") {
             fs::remove_file(file)?;
         }
     }
@@ -67,4 +66,15 @@ pub fn write_report_file(path: String, data: String) -> Result<(), io::Error> {
     buf.write(data.as_bytes()).unwrap();
 
     Ok(())
+}
+
+fn check_extension(file: &PathBuf, ext: &str) -> bool {
+    let extension = match file.extension() {
+        Some(ext) => ext,
+        None => {
+            OsStr::new("None")
+        }
+    };
+
+    extension == ext
 }
