@@ -5,10 +5,7 @@ extern crate serde_json;
 
 use flex::Flex;
 use horrorshow::prelude::*;
-use std::fs::OpenOptions;
 use std::io;
-use std::io::BufWriter;
-use std::io::prelude::*;
 use std::usize;
 
 static JS_CODE: &'static str = include_str!("../../../template.js");
@@ -112,21 +109,15 @@ pub fn append(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
     Ok(table)
 }
 
-pub fn generate(tables: &Vec<Table>) -> Result<(), io::Error> {
+pub fn generate(tables: &Vec<Table>) -> Result<String, io::Error> {
     let template: String = template();
     let mut body: String = "".to_owned();
-    let file = OpenOptions::new()
-        .write(true)
-        .create(true)
-        .append(true)
-        .open("report.html")?;
-    let mut buf = BufWriter::new(file);
+
     for table in tables {
         body.push_str(&table.body);
     }
 
     let template: String = template.replace("<table></table>", &body);
-    buf.write(template.as_bytes()).unwrap();
 
-    Ok(())
+    Ok(template)
 }

@@ -5,7 +5,6 @@ extern crate html;
 use std::path::PathBuf;
 use std::env::current_dir;
 use flex::Flex;
-use std::fs;
 use html::Table;
 
 fn main() {
@@ -20,12 +19,6 @@ fn main() {
             let current_dir = current_dir().unwrap();
             path.push(current_dir.join("logs"));
         }
-    }
-
-    match fs::remove_file("report.html") {
-        Err(_e) => {
-        }
-        _ => {}
     }
 
     let files = reader::read_dir(path).expect("Cannot read dir");
@@ -69,5 +62,6 @@ fn main() {
         println!("{}% [{}]", progress, symbols);
     }
 
-    html::generate(&tables).expect("Error: generate report");
+    let report: String = html::generate(&tables).expect("Error: generate report");
+    reader::write_report_file("report.html", report).expect("Error: save report");
 }
