@@ -38,13 +38,12 @@ fn main() {
             }
             Ok(flex) => {
                 let mut flex: Vec<Flex> = Vec::from(flex);
-                match html::append(&mut flex) {
+                match html::generate(&mut flex) {
                     Err(_e) => {
                         continue;
                     }
-                    Ok(table) => {
-                        let report: String = html::generate(&table).expect("Error: generate report");
-                        reader::write_report_file(&table.date, report).expect("Error: save report");
+                    Ok((date, template)) => {
+                        reader::write_report_file(date, template).expect("Error: save report");
                     }
                 }
             }

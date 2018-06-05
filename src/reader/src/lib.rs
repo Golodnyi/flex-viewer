@@ -49,9 +49,13 @@ pub fn remove_reports(dir: PathBuf) -> Result<(), io::Error> {
     Ok(())
 }
 
-pub fn write_report_file(path: &String, data: String) -> Result<(), io::Error> {
+pub fn write_report_file(path: String, data: String) -> Result<(), io::Error> {
     let mut path = PathBuf::from(path);
     path.set_extension("html");
+
+    if path.is_file() {
+        fs::remove_file(&path)?;
+    }
 
     let file = OpenOptions::new()
         .write(true)

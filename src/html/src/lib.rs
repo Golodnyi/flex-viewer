@@ -59,7 +59,7 @@ fn is_allowed_sensor(name: &String) -> Result<bool, io::Error> {
 fn parse_table(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
     let mut header: Vec<String> = vec![];
     let mut i = 0;
-    for sensor in flex {
+    for sensor in flex.iter_mut() {
         if i >= 85 {
             break;
         }
@@ -72,22 +72,12 @@ fn parse_table(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
         header.push(sensor.name.clone());
     }
 
-    let table = Table {
+    let timestamp = flex[2].value;
+    let mut table = Table {
         header: header,
         body: "".to_owned(),
-        date: "".to_owned()
+        date: NaiveDateTime::from_timestamp(timestamp as i64, 0).format("%Y-%m-%d %H:%M:%S").to_string()
     };
-
-    Ok(table)
-}
-
-pub fn append(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
-    let mut table: Table = parse_table(flex)?;
-    if flex[2].name == "Time" {
-        table.date = NaiveDateTime::from_timestamp(flex[2].value as i64, 0).format("%Y-%m-%d").to_string();
-    } else {
-        table.date = "UnknownDate".to_owned();
-    }
 
     table.body = format!(
         "{}",
@@ -118,9 +108,11 @@ pub fn append(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
     Ok(table)
 }
 
-pub fn generate(table: &Table) -> Result<String, io::Error> {
+pub fn generate(flex: &mut Vec<Flex>) -> Result<(String, String), io::Error> {
+    let table: Table = parse_table(flex)?;
+
     let template: String = template();
     let template: String = template.replace("<table></table>", &table.body);
 
-    Ok(template)
+    Ok((table.date, template))
 }
