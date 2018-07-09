@@ -14,6 +14,17 @@ struct Config {
     character: u8,
 }
 
+lazy_static! {
+    static ref CONFIG: Vec<Config> = {
+        let init = match serde_json::from_str(&FLEX_CONFIG) {
+            Ok(data) => data,
+            Err(e) => panic!("Error parse flex config: {:?}", e)
+        };
+        
+        init
+    };
+}
+
 pub struct Flex {
     pub name: String,
     pub size: u8,
@@ -24,10 +35,9 @@ pub struct Flex {
 
 pub fn get(bitfield: &Bitfield) -> Result<Vec<Flex>, io::Error> {
     let mut flex: Vec<Flex> = vec![];
-    let config: Vec<Config> = serde_json::from_str(&FLEX_CONFIG)?;
 
-    for conf in config {
-        flex.push(Flex { name: conf.name, size: conf.size, character: conf.character, enable: false, value: 0 as f64 });
+    for conf in CONFIG.iter() {
+        flex.push(Flex { name: conf.name.to_owned(), size: conf.size, character: conf.character, enable: false, value: 0 as f64 });
     }
     load_sensors(&mut flex, &bitfield);
 

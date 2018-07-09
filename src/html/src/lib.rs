@@ -1,5 +1,7 @@
 #[macro_use]
 extern crate horrorshow;
+#[macro_use]
+extern crate lazy_static;
 extern crate flex;
 extern crate serde_json;
 extern crate chrono;
@@ -11,8 +13,19 @@ use std::usize;
 use chrono::prelude::*;
 
 static JS_CODE: &'static str = include_str!("../../../template.js");
-static ALLOWED_SENSORS: &'static str = include_str!("../../../allowedSensors.json");
+static ALLOWED_SENSORS_JSON: &'static str = include_str!("../../../allowedSensors.json");
 static STYLES: &'static str = include_str!("../../../styles.css");
+
+lazy_static! {
+    static ref ALLOWED_SENSORS: Vec<String> = {
+        let init = match serde_json::from_str(&ALLOWED_SENSORS_JSON) {
+            Ok(data) => data,
+            Err(e) => panic!("Error cannot parse allowed sensors: {:?}", e)
+        };
+
+        init
+    };
+}
 
 pub struct Table {
     pub header: Vec<String>,
@@ -42,9 +55,7 @@ fn template() -> String {
 }
 
 fn is_allowed_sensor(name: &String) -> Result<bool, io::Error> {
-    let allowed_sensors: Vec<String> = serde_json::from_str(&ALLOWED_SENSORS)?;
-
-    let val = match allowed_sensors.iter().position(|r| r == name) {
+    let val = match ALLOWED_SENSORS.iter().position(|r| r == name) {
         Some(x) => x,
         None => usize::MAX,
     };
