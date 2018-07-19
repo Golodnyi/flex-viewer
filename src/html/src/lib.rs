@@ -87,7 +87,7 @@ fn parse_table(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
     let mut table = Table {
         header: header,
         body: "".to_owned(),
-        date: NaiveDateTime::from_timestamp(timestamp as i64, 0).format("%Y-%m-%d %H:%M:%S").to_string()
+        date: NaiveDateTime::from_timestamp(timestamp as i64, 0).format("%Y-%m-%d-%H-%M-%S").to_string()
     };
 
     table.body = format!(
