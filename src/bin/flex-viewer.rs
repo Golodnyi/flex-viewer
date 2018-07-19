@@ -1,10 +1,10 @@
-extern crate reader;
 extern crate flex;
 extern crate html;
+extern crate reader;
 
-use std::path::PathBuf;
-use std::env::current_dir;
 use flex::Flex;
+use std::env::current_dir;
+use std::path::PathBuf;
 use std::process;
 
 fn main() {
@@ -60,7 +60,10 @@ fn main() {
 }
 
 fn progress_bar(progress: usize) {
-    println!("{}[2J", 27 as char);
+    if cfg!(target_os = "linux") {
+        println!("{}[2J", 27 as char);
+    }
+
     let mut symbols: String = "".to_string();
 
     for p in 0..100 {
