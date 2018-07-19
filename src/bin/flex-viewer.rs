@@ -91,6 +91,7 @@ fn set_console_mode() {
         let std_out_handle = GetStdHandle(STD_OUT_HANDLE);
         let mut console_mode: u32 = 0;
         GetConsoleMode(std_out_handle, &mut console_mode);
+        
         if console_mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING == 0 {
             SetConsoleMode(
                 std_out_handle,
