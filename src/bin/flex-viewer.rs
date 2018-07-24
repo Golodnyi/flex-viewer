@@ -76,7 +76,6 @@ fn progress_bar(progress: usize) {
             symbols.push_str(" ");
         }
     }
-    
     println!("{}% [{}]", progress, symbols);
 }
 

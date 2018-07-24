@@ -2,15 +2,15 @@
 extern crate horrorshow;
 #[macro_use]
 extern crate lazy_static;
+extern crate chrono;
 extern crate flex;
 extern crate serde_json;
-extern crate chrono;
 
+use chrono::prelude::*;
 use flex::Flex;
 use horrorshow::prelude::*;
 use std::io;
 use std::usize;
-use chrono::prelude::*;
 
 static JS_CODE: &'static str = include_str!("../../../template.js");
 static ALLOWED_SENSORS_JSON: &'static str = include_str!("../../../allowedSensors.json");
@@ -20,7 +20,7 @@ lazy_static! {
     static ref ALLOWED_SENSORS: Vec<String> = {
         let init = match serde_json::from_str(&ALLOWED_SENSORS_JSON) {
             Ok(data) => data,
-            Err(e) => panic!("Error cannot parse allowed sensors: {:?}", e)
+            Err(e) => panic!("Error cannot parse allowed sensors: {:?}", e),
         };
 
         init
@@ -30,7 +30,7 @@ lazy_static! {
 pub struct Table {
     pub header: Vec<String>,
     pub body: String,
-    pub date: String
+    pub date: String,
 }
 
 fn template() -> String {
@@ -87,7 +87,9 @@ fn parse_table(flex: &mut Vec<Flex>) -> Result<Table, io::Error> {
     let mut table = Table {
         header: header,
         body: "".to_owned(),
-        date: NaiveDateTime::from_timestamp(timestamp as i64, 0).format("%Y-%m-%d-%H-%M-%S").to_string()
+        date: NaiveDateTime::from_timestamp(timestamp as i64, 0)
+            .format("%Y-%m-%d-%H-%M-%S")
+            .to_string(),
     };
 
     table.body = format!(

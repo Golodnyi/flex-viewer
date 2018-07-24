@@ -8,9 +8,9 @@ mod bitfield;
 mod flex;
 mod package;
 
-use std::io;
 use bitfield::Bitfield;
 pub use flex::Flex;
+use std::io;
 
 pub fn parse(data: Vec<u8>) -> Result<(Vec<Flex>), io::Error> {
     if data.len() == 0 {

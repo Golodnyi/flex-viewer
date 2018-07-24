@@ -1,8 +1,8 @@
 extern crate byteorder;
 
-use std::io;
 use self::byteorder::{LittleEndian, ReadBytesExt};
 use flex::Flex;
+use std::io;
 
 const SIGNED: u8 = 0;
 const UNSIGNED: u8 = 1;
@@ -37,9 +37,7 @@ pub fn parse(flex: &mut Flex, field: &[u8]) -> Result<(), io::Error> {
                 field.read_f32::<LittleEndian>().unwrap() as f64
             }
         }
-        _ => {
-            0 as f64
-        }
+        _ => 0 as f64,
     };
 
     Ok(())

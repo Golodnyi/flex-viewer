@@ -2,7 +2,7 @@ use std::io;
 
 pub struct BitfieldSize {
     pub bits: u8,
-    pub bytes: u8
+    pub bytes: u8,
 }
 pub struct Bitfield {
     pub size: BitfieldSize,
@@ -18,9 +18,9 @@ pub fn get(data: &Vec<u8>) -> Result<Bitfield, io::Error> {
     let mut bitfield = Bitfield {
         size: BitfieldSize {
             bits: data[0],
-            bytes: data[0] / 8 + 1
+            bytes: data[0] / 8 + 1,
         },
-        data: vec![]
+        data: vec![],
     };
 
     if data[1..].len() < bitfield.size.bytes as usize {

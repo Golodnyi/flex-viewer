@@ -1,11 +1,11 @@
-use std::path::PathBuf;
-use std::io;
-use std::io::prelude::*;
+use std::ffi::OsStr;
 use std::fs;
 use std::fs::File;
-use std::io::BufWriter;
 use std::fs::OpenOptions;
-use std::ffi::OsStr;
+use std::io;
+use std::io::prelude::*;
+use std::io::BufWriter;
+use std::path::PathBuf;
 
 pub fn read_dir(dir: PathBuf) -> Result<Vec<PathBuf>, io::Error> {
     let mut files: Vec<PathBuf> = vec![];
@@ -71,9 +71,7 @@ pub fn write_report_file(path: String, data: String) -> Result<(), io::Error> {
 fn check_extension(file: &PathBuf, ext: &str) -> bool {
     let extension = match file.extension() {
         Some(ext) => ext,
-        None => {
-            OsStr::new("None")
-        }
+        None => OsStr::new("None"),
     };
     extension == ext
 }
